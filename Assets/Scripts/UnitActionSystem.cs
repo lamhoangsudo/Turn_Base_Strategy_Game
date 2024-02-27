@@ -19,7 +19,10 @@ public class UnitActionSystem : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             if (HandleUnitSelection()) return;
-            selectUnit.SetTagetPosition(MouseWorld.Instance.GetTagetPosititon());
+            if (selectUnit != null)
+            {
+                selectUnit.SetTagetPosition(MouseWorld.Instance.GetTagetPosititon());
+            }
         };
     }
     private bool HandleUnitSelection()
