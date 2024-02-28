@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    public event EventHandler OnUnitMove;
     [SerializeField] private Transform gridDebugPrefab;
     private GridSystem gridSystem;
     public static LevelGrid Instance;
@@ -19,7 +18,6 @@ public class LevelGrid : MonoBehaviour
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
         gridObject.AddUnitAtGridObject(unit);
-        OnUnitMove?.Invoke(this, EventArgs.Empty);
     }
     public List<Unit> GetUnitAtGridPosition(GridPosition gridPosition)
     {
@@ -34,9 +32,26 @@ public class LevelGrid : MonoBehaviour
     {
         return gridSystem.GetGridPosition(position);
     }
+    public Vector3 GetGridPosition(GridPosition position)
+    {
+        return gridSystem.GetWorldPosition(position);
+    }
     public void UnitMoveGridPosition(Unit unit, GridPosition fromGridPosition, GridPosition toGridPosition)
     {
         RemoveUnitAtGridPosition(fromGridPosition, unit);
         AddUnitAtGridPosition(toGridPosition, unit);
+    }
+    public bool IsValidGridPosition(GridPosition gridPosition)
+    {
+        return gridSystem.IsValidGridPosition(gridPosition);
+    }
+    public bool IsUnitOnGridPosition(GridPosition gridPosition)
+    {
+        return gridSystem.GetGridObject(gridPosition).HasAnyUnit();
+    }
+    public void GetWidthAndHeight(out int width, out int height)
+    {
+        width = gridSystem.width;
+        height = gridSystem.height;
     }
 }

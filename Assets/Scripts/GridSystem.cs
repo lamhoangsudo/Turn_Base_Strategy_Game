@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GridSystem
 {
-    private int width;
-    private int height;
+    public int width {  get; private set; }
+    public int height { get; private set; }
     private float cellSize;
     private GridObject[,] gridObjects;
 
@@ -46,5 +46,12 @@ public class GridSystem
     public GridObject GetGridObject(GridPosition gridPosition)
     {
         return gridObjects[gridPosition.x, gridPosition.z];
+    }
+    public bool IsValidGridPosition(GridPosition gridPosition)
+    {
+        return gridPosition.x >= 0 
+            && gridPosition.z >= 0 
+            && gridPosition.x < width 
+            && gridPosition.z < height;
     }
 }
