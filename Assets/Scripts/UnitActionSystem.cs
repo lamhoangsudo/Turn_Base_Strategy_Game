@@ -12,7 +12,7 @@ public class UnitActionSystem : MonoBehaviour
     public event EventHandler<Unit> OnSelectUnitChange;
     private void Awake()
     {
-        if(Instance == null) Instance = this;
+        if (Instance == null) Instance = this;
     }
     private void Update()
     {
@@ -28,13 +28,20 @@ public class UnitActionSystem : MonoBehaviour
                 }
             };
         }
+        if (Input.GetMouseButtonDown(1))
+        {
+            if (selectUnit != null)
+            {
+                selectUnit.SpinAction().Spin();
+            };
+        }
     }
     private bool HandleUnitSelection()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hitInfo, float.MaxValue, mouseLayer.value))
         {
-            if(hitInfo.transform.TryGetComponent<Unit>(out Unit unit))
+            if (hitInfo.transform.TryGetComponent<Unit>(out Unit unit))
             {
                 this.selectUnit = unit;
                 OnSelectUnitChange?.Invoke(this, selectUnit);

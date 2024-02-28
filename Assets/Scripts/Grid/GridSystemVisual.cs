@@ -38,7 +38,7 @@ public class GridSystemVisual : MonoBehaviour
     }
     private void Update()
     {
-        if (selectUnit != null && selectUnit.MoveAction().unitMove)
+        if (selectUnit != null && selectUnit.MoveAction().UnitIsMoving())
         {
             UpdateVisual(selectUnit.MoveAction().GetListValidGridPosition());
         }

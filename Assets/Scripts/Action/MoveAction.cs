@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class MoveAction : MonoBehaviour
+public class MoveAction : BaseAction
 {
     [SerializeField] private Animator unitAnimator;
     [SerializeField] private float moveSpeed;
@@ -11,15 +11,10 @@ public class MoveAction : MonoBehaviour
     [SerializeField] private int maxMoveDistance;
     private Vector3 tagetPosition;
     private const float tagetPositionDistance = 0.1f;
-    private Unit unit;
-    public bool unitMove {  get; private set; }
-    private void Awake()
-    {
-        tagetPosition = transform.position;
-    }
+    private bool unitIsMoving;
     private void Start()
     {
-        unit = GetComponent<Unit>();    
+        tagetPosition = transform.position;
     }
     private void Update()
     {
@@ -27,11 +22,16 @@ public class MoveAction : MonoBehaviour
     }
     private void HandleMovement()
     {
+        if (!isActive)
+        {
+            return;
+        }
         Vector3 moveDir = (tagetPosition - this.transform.position).normalized;
         if (Vector3.Distance(tagetPosition, this.transform.position) > tagetPositionDistance)
         {
             unitAnimator.SetBool("IsWalking", true);
-            unitMove = true;
+            isActive = true;
+            unitIsMoving = true;
             this.transform.position += moveSpeed * Time.deltaTime * moveDir;
             //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(moveDir), Time.deltaTime * rotationSpeed);
             transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotationSpeed);
@@ -39,7 +39,8 @@ public class MoveAction : MonoBehaviour
         else
         {
             unitAnimator.SetBool("IsWalking", false);
-            unitMove = false;
+            isActive = false;
+            unitIsMoving = false;
         }
     }
     public void SetTagetPosition(GridPosition tagetPosition)
@@ -48,12 +49,13 @@ public class MoveAction : MonoBehaviour
     }
     public bool IsValidGridPosition(GridPosition gridPosition)
     {
+        isActive = true;
         return GetListValidGridPosition().Contains(gridPosition);
     }
     public List<GridPosition> GetListValidGridPosition()
     {
         List<GridPosition> gridPositionsValid = new List<GridPosition>();
-        GridPosition unitGridPosition = unit.GetGridPosition();
+        GridPosition unitGridPosition = selectUnit.GetGridPosition();
         for(int x = -maxMoveDistance; x <= maxMoveDistance; x++)
         {
             for (int z = -maxMoveDistance; z <= maxMoveDistance; z++)
@@ -68,5 +70,9 @@ public class MoveAction : MonoBehaviour
             }
         }
         return gridPositionsValid;
+    }
+    public bool UnitIsMoving()
+    {
+        return unitIsMoving;
     }
 }
