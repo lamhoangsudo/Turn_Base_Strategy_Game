@@ -14,6 +14,7 @@ public class MoveAction : BaseAction
     private const float tagetPositionDistance = 0.1f;
     private bool unitIsMoving;
     private Action moveComplete;
+    private const string actionName = "Move";
     private void Start()
     {
         tagetPosition = transform.position;
@@ -59,14 +60,14 @@ public class MoveAction : BaseAction
     public List<GridPosition> GetListValidGridPosition()
     {
         List<GridPosition> gridPositionsValid = new List<GridPosition>();
-        GridPosition unitGridPosition = selectUnit.GetGridPosition();
-        for(int x = -maxMoveDistance; x <= maxMoveDistance; x++)
+        GridPosition unitGridPosition = unit.GetGridPosition();
+        for (int x = -maxMoveDistance; x <= maxMoveDistance; x++)
         {
             for (int z = -maxMoveDistance; z <= maxMoveDistance; z++)
             {
                 GridPosition validGridPosition = unitGridPosition + new GridPosition(x, z);
-                if (LevelGrid.Instance.IsValidGridPosition(validGridPosition) 
-                    && validGridPosition != unitGridPosition 
+                if (LevelGrid.Instance.IsValidGridPosition(validGridPosition)
+                    && validGridPosition != unitGridPosition
                     && !LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition))
                 {
                     gridPositionsValid.Add(validGridPosition);
@@ -78,5 +79,20 @@ public class MoveAction : BaseAction
     public bool UnitIsMoving()
     {
         return unitIsMoving;
+    }
+
+    public override string GetNameAction()
+    {
+        return actionName;
+    }
+
+    public override void GetAction(Action onMoveComplete, Unit unitAction)
+    {
+        unit = unitAction;
+        GridPosition gridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon());
+        if (IsValidGridPosition(gridPosition))
+        {
+            SetTagetPosition(onMoveComplete, gridPosition);
+        }
     }
 }
