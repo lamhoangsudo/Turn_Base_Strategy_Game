@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,6 +13,7 @@ public class MoveAction : BaseAction
     private Vector3 tagetPosition;
     private const float tagetPositionDistance = 0.1f;
     private bool unitIsMoving;
+    private Action moveComplete;
     private void Start()
     {
         tagetPosition = transform.position;
@@ -38,13 +40,15 @@ public class MoveAction : BaseAction
         }
         else
         {
+            moveComplete();
             unitAnimator.SetBool("IsWalking", false);
             isActive = false;
             unitIsMoving = false;
         }
     }
-    public void SetTagetPosition(GridPosition tagetPosition)
+    public void SetTagetPosition(Action onMoveComplete, GridPosition tagetPosition)
     {
+        moveComplete = onMoveComplete;
         this.tagetPosition = LevelGrid.Instance.GetGridPosition(tagetPosition);
     }
     public bool IsValidGridPosition(GridPosition gridPosition)
