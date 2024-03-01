@@ -8,9 +8,11 @@ public class Unit : MonoBehaviour
     private GridPosition gridPosition;
     private MoveAction moveAction;
     private SpinAction spinAction;
+    [SerializeField] private int actionPoin;
     public BaseAction[] baseActions {  get; private set; }
     private void Start()
     {
+        actionPoin = 2;
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
         moveAction = GetComponent<MoveAction>();
@@ -36,4 +38,17 @@ public class Unit : MonoBehaviour
         return spinAction;
     }
     public GridPosition GetGridPosition() { return gridPosition; }
+    public bool TryToSpendActionPoint(BaseAction selectAction)
+    {
+        if(actionPoin >= selectAction.GetActionPointCost())
+        {
+            actionPoin -= selectAction.GetActionPointCost();
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    public int GetActionPoint() { return actionPoin; }
 }

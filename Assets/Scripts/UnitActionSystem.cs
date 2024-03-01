@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -12,6 +13,9 @@ public class UnitActionSystem : MonoBehaviour
     private BaseAction selectAction;
     [SerializeField] private LayerMask mouseLayer;
     public event EventHandler<Unit> OnSelectUnitChange;
+    public event EventHandler<BaseAction> OnSelectActionChange;
+    public event EventHandler<bool> OnBusyChange;
+    public event EventHandler<int> OnActionPointChange;
     public bool isBusy { get; private set; }
     private void Awake()
     {
@@ -37,9 +41,11 @@ public class UnitActionSystem : MonoBehaviour
                     unit.MoveAction().SetTagetPosition(() => { isBusy = false; }, gridPosition);
                 }
             };*/
-            if (selectUnit != null && selectAction != null)
-            {
-                selectAction.GetAction(() => { isBusy = false; }, selectUnit);
+            if (selectUnit != null && selectAction != null && selectUnit.TryToSpendActionPoint(selectAction))
+            {                
+                OnBusyChange?.Invoke(this, true);
+                OnActionPointChange?.Invoke(this, selectUnit.GetActionPoint());
+                selectAction.GetAction(() => { OnBusyChange?.Invoke(this, false); isBusy = false; }, selectUnit);
             }
         }
         /*if (Input.GetMouseButtonDown(1))
@@ -63,6 +69,7 @@ public class UnitActionSystem : MonoBehaviour
                     this.selectUnit = unit;
                     this.selectAction = unit.MoveAction();
                     OnSelectUnitChange?.Invoke(this, selectUnit);
+                    OnSelectActionChange?.Invoke(this, selectAction);
                     return true;
                 }
             }
@@ -74,6 +81,7 @@ public class UnitActionSystem : MonoBehaviour
         if (selectUnit != null)
         {
             selectAction = action;
+            OnSelectActionChange?.Invoke(this, action);
         }
     }
 }
