@@ -34,13 +34,14 @@ public class GridSystemVisual : MonoBehaviour
     private void Instance_OnSelectUnitChange(object sender, Unit selectUnit)
     {
         this.selectUnit = selectUnit;
-        UpdateVisual(selectUnit.MoveAction().GetListValidGridPosition());
+        UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
     }
     private void Update()
     {
-        if (selectUnit != null && selectUnit.MoveAction().UnitIsMoving())
+        if (selectUnit != null 
+            && selectUnit.selectAction != null)
         {
-            UpdateVisual(selectUnit.MoveAction().GetListValidGridPosition());
+            UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
         }
     }
     private void HideAllGridVisual()

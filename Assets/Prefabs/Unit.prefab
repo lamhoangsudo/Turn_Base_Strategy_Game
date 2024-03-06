@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 5557019275092520731}
   - component: {fileID: 5352883394388975028}
   - component: {fileID: 7474889798720305319}
+  - component: {fileID: 2279683878540650007}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -169,6 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36b0dccebc626146a86530497e2fd40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actionPoin: 0
+  isPlayer: 0
+  selectAction: {fileID: 0}
 --- !u!65 &5557019275092520731
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -218,6 +222,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18f6f7564d8c8340a4bb35b145f19ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2279683878540650007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559023256260476457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da3b8515ed9562444a3cef9787deb09f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MAX_DISTANCE: 2
+  rotationSpeed: 7
 --- !u!1001 &6411649965754705190
 PrefabInstance:
   m_ObjectHideFlags: 0

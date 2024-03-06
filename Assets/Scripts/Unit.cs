@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,18 +7,33 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     private GridPosition gridPosition;
-    private MoveAction moveAction;
-    private SpinAction spinAction;
+    public MoveAction moveAction { get; private set; }
+    public SpinAction spinAction { get; private set; }
     [SerializeField] private int actionPoin;
+    [SerializeField] private bool isPlayer;
+    public BaseAction selectAction;
+    private const int MAX_ACTION_POINT = 2;
     public BaseAction[] baseActions {  get; private set; }
+    public static event EventHandler<int> OnAnyActionPointChange;
+    
     private void Start()
     {
-        actionPoin = 2;
+        actionPoin = MAX_ACTION_POINT;
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
         baseActions = GetComponents<BaseAction>();
+        TurnSystem.Instance.OnTurnNumberChange += Instance_OnTurnNumberChange;
+    }
+
+    private void Instance_OnTurnNumberChange(object sender, System.EventArgs e)
+    {
+        if ((isPlayer == true && TurnSystem.Instance.isPlayerTurn == true) || (isPlayer == false && TurnSystem.Instance.isPlayerTurn == false)) 
+        {
+            actionPoin = MAX_ACTION_POINT;
+            OnAnyActionPointChange(this, MAX_ACTION_POINT);
+        }
     }
 
     private void Update()
@@ -29,26 +45,21 @@ public class Unit : MonoBehaviour
             gridPosition = currentGridPosition;
         }
     }
-    public MoveAction MoveAction()
-    {
-        return moveAction;
-    }
-    public SpinAction SpinAction()
-    {
-        return spinAction;
-    }
     public GridPosition GetGridPosition() { return gridPosition; }
-    public bool TryToSpendActionPoint(BaseAction selectAction)
+    public bool TryToSpendActionPoint(BaseAction selectAction, bool returnActionPoint)
     {
-        if(actionPoin >= selectAction.GetActionPointCost())
+        if (actionPoin >= selectAction.GetActionPointCost() && returnActionPoint == false)
         {
             actionPoin -= selectAction.GetActionPointCost();
             return true;
         }
-        else
+        else if (returnActionPoint == true)
         {
-            return false;
+            actionPoin += selectAction.GetActionPointCost();
+            return true;
         }
+        else { return false; }
     }
     public int GetActionPoint() { return actionPoin; }
+    public bool IsPlayer() { return isPlayer; }
 }

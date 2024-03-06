@@ -19,6 +19,12 @@ public class UnitActionSystemUI : MonoBehaviour
         UnitActionSystem.Instance.OnSelectUnitChange += Instance_OnSelectUnitChange;
         UnitActionSystem.Instance.OnSelectActionChange += Instance_OnSelectActionChange;
         UnitActionSystem.Instance.OnActionPointChange += Instance_OnActionPointChange;
+        Unit.OnAnyActionPointChange += Unit_OnAnyActionPointChange;
+    }
+
+    private void Unit_OnAnyActionPointChange(object sender, int maxActionPoint)
+    {
+        UpdateActionPointText(maxActionPoint);
     }
 
     private void Instance_OnActionPointChange(object sender, int actionPoint)

@@ -13,7 +13,6 @@ public class MoveAction : BaseAction
     private Vector3 tagetPosition;
     private const float tagetPositionDistance = 0.1f;
     private bool unitIsMoving;
-    private Action moveComplete;
     private const string actionName = "Move";
     private void Start()
     {
@@ -41,25 +40,18 @@ public class MoveAction : BaseAction
         }
         else
         {
-            moveComplete();
+            base.ActionComplete();
             unitAnimator.SetBool("IsWalking", false);
-            isActive = false;
             unitIsMoving = false;
         }
     }
-    public void SetTagetPosition(Action onMoveComplete, GridPosition tagetPosition)
+    public override bool IsValidGridPosition(GridPosition gridPosition)
     {
-        moveComplete = onMoveComplete;
-        this.tagetPosition = LevelGrid.Instance.GetGridPosition(tagetPosition);
-    }
-    public bool IsValidGridPosition(GridPosition gridPosition)
-    {
-        isActive = true;
         return GetListValidGridPosition().Contains(gridPosition);
     }
-    public List<GridPosition> GetListValidGridPosition()
+    public override List<GridPosition> GetListValidGridPosition()
     {
-        List<GridPosition> gridPositionsValid = new List<GridPosition>();
+        List<GridPosition> gridPositionsValid = new();
         GridPosition unitGridPosition = unit.GetGridPosition();
         for (int x = -maxMoveDistance; x <= maxMoveDistance; x++)
         {
@@ -89,10 +81,7 @@ public class MoveAction : BaseAction
     public override void GetAction(Action onMoveComplete, Unit unitAction)
     {
         unit = unitAction;
-        GridPosition gridPosition = LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon());
-        if (IsValidGridPosition(gridPosition))
-        {
-            SetTagetPosition(onMoveComplete, gridPosition);
-        }
+        base.ActionStart(onMoveComplete);
+        this.tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
     }
 }
