@@ -10,6 +10,12 @@ public class ShootAction : BaseAction
     [SerializeField] private float rotationSpeed;
     private Unit targetUnit;
     private bool canShootBullet;
+    public event EventHandler<SetUpBulletProjectile> OnShootAction;
+    public class SetUpBulletProjectile : EventArgs
+    {
+        public Unit tagetUnit;
+        public Unit shootingUnit;
+    }
     private enum State
     {
         Aiming,
@@ -35,6 +41,7 @@ public class ShootAction : BaseAction
                 }
                 break;
             case State.Cooloff:
+                //Cooloff();
                 break;
         }
         if (stateTimer < 0)
@@ -57,13 +64,22 @@ public class ShootAction : BaseAction
                 stateTimer = timeStateCooloff;
                 break;
             case State.Cooloff:
+                isActive = false;
                 base.ActionComplete();
                 break;
         }
     }
-    private void Shoot()
+    private void Cooloff()
     {
 
+    }
+    private void Shoot()
+    {
+        OnShootAction?.Invoke(this, new SetUpBulletProjectile
+        {
+            tagetUnit = targetUnit,
+            shootingUnit = unit
+        });
     }
     private void Aim()
     {
@@ -104,7 +120,6 @@ public class ShootAction : BaseAction
         stateTimer = timeStateAiming;
         canShootBullet = true;
     }
-
     public override string GetNameAction()
     {
         return "Shoot";

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class MoveAction : BaseAction
 {
-    [SerializeField] private Animator unitAnimator;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private int maxMoveDistance;
@@ -14,6 +13,8 @@ public class MoveAction : BaseAction
     private const float tagetPositionDistance = 0.1f;
     private bool unitIsMoving;
     private const string actionName = "Move";
+    public event EventHandler OnStartAction;
+    public event EventHandler OnStopAction;
     private void Start()
     {
         tagetPosition = transform.position;
@@ -31,7 +32,7 @@ public class MoveAction : BaseAction
         Vector3 moveDir = (tagetPosition - this.transform.position).normalized;
         if (Vector3.Distance(tagetPosition, this.transform.position) > tagetPositionDistance)
         {
-            unitAnimator.SetBool("IsWalking", true);
+            OnStartAction?.Invoke(this, EventArgs.Empty);
             isActive = true;
             unitIsMoving = true;
             this.transform.position += moveSpeed * Time.deltaTime * moveDir;
@@ -41,7 +42,7 @@ public class MoveAction : BaseAction
         else
         {
             base.ActionComplete();
-            unitAnimator.SetBool("IsWalking", false);
+            OnStopAction?.Invoke(this, EventArgs.Empty);
             unitIsMoving = false;
         }
     }
