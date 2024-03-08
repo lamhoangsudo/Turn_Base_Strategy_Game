@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2777620093268201084}
   - component: {fileID: 3292950941508989873}
+  - component: {fileID: 3714797967165537785}
   m_Layer: 7
   m_Name: UnitRagdoll
   m_TagString: Untagged
@@ -77,6 +78,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ragdollRootBone: {fileID: 6940485574825048417}
+--- !u!54 &3714797967165537785
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559023256260476457}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &6411649965754705190
 PrefabInstance:
   m_ObjectHideFlags: 0
