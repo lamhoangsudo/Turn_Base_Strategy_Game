@@ -58,6 +58,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3544967256471741111, guid: 9c1da819d50234e41a5748f85c6ea87f,
+        type: 3}
+      propertyPath: ragdollPrefap
+      value: 
+      objectReference: {fileID: 6605479340396818792, guid: 777d5eadca6b19a4fb0b0e078185495c,
+        type: 3}
     - target: {fileID: 6936710917566955163, guid: 9c1da819d50234e41a5748f85c6ea87f,
         type: 3}
       propertyPath: m_IsActive
