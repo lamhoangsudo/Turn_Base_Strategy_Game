@@ -80,6 +80,7 @@ public class ShootAction : BaseAction
             tagetUnit = targetUnit,
             shootingUnit = unit
         });
+        targetUnit.DamageUnit(100);
     }
     private void Aim()
     {

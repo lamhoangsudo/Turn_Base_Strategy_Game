@@ -13,6 +13,7 @@ public class Unit : MonoBehaviour
     [SerializeField] private bool isPlayer;
     public BaseAction selectAction;
     private const int MAX_ACTION_POINT = 2;
+    private HeathSystem heathSystem;
     public BaseAction[] baseActions {  get; private set; }
     public static event EventHandler<int> OnAnyActionPointChange;
     
@@ -25,6 +26,14 @@ public class Unit : MonoBehaviour
         spinAction = GetComponent<SpinAction>();
         baseActions = GetComponents<BaseAction>();
         TurnSystem.Instance.OnTurnNumberChange += Instance_OnTurnNumberChange;
+        heathSystem = GetComponent<HeathSystem>();
+        heathSystem.OnDead += Unit_OnDead;
+    }
+
+    private void Unit_OnDead(object sender, EventArgs e)
+    {
+        LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this);
+        Destroy(this.gameObject);
     }
 
     private void Instance_OnTurnNumberChange(object sender, System.EventArgs e)
@@ -62,4 +71,8 @@ public class Unit : MonoBehaviour
     }
     public int GetActionPoint() { return actionPoin; }
     public bool IsPlayer() { return isPlayer; }
+    public void DamageUnit(int  damageAmount)
+    {
+        heathSystem.Damage(damageAmount);
+    }
 }

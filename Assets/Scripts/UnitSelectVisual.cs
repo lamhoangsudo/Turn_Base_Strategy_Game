@@ -30,4 +30,8 @@ public class UnitSelectVisual : MonoBehaviour
             this.gameObject.SetActive(false);
         }
     }
+    private void OnDestroy()
+    {
+        UnitActionSystem.Instance.OnSelectUnitChange -= Instance_OnSelectUnitChange;
+    }
 }

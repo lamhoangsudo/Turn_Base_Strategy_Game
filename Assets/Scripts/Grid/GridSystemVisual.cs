@@ -18,9 +18,9 @@ public class GridSystemVisual : MonoBehaviour
     private void Start()
     {
         LevelGrid.Instance.GetWidthAndHeight(out int width, out int height);
-        for(int x = 0; x < width; x++)
+        for (int x = 0; x < width; x++)
         {
-            for(int z = 0; z < height; z++)
+            for (int z = 0; z < height; z++)
             {
                 GridPosition gridPosition = new(x, z);
                 GridSystemVisualSingle gridVisual = Instantiate(prefabVisual, LevelGrid.Instance.GetGridPosition(gridPosition), Quaternion.identity).GetComponent<GridSystemVisualSingle>();
@@ -29,37 +29,54 @@ public class GridSystemVisual : MonoBehaviour
             }
         }
         UnitActionSystem.Instance.OnSelectUnitChange += Instance_OnSelectUnitChange;
+        UnitActionSystem.Instance.OnSelectActionChange += Instance_OnSelectActionChange;
+    }
+
+    private void Instance_OnUpdateGripVisual(object sender, System.EventArgs e)
+    {
+        UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
+    }
+
+    private void Instance_OnSelectActionChange(object sender, BaseAction e)
+    {
+        UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
     }
 
     private void Instance_OnSelectUnitChange(object sender, Unit selectUnit)
     {
         this.selectUnit = selectUnit;
-        UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
     }
     private void Update()
     {
-        if (selectUnit != null 
-            && selectUnit.selectAction != null)
+        if (selectUnit != null && selectUnit.selectAction != null && selectUnit.selectAction.IsActive() == true)
         {
             UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
         }
     }
     private void HideAllGridVisual()
     {
-        foreach(var gridVisualPosition in gridVisualPositions)
+        foreach (var gridVisualPosition in gridVisualPositions)
         {
-            foreach (GridPosition gridPosition in gridPositions)
+            if (gridPositions.Count > 0)
             {
-                if(gridVisualPosition.Key != gridPosition && gridVisualPosition.Value.IsActive() == true)
+                foreach (GridPosition gridPosition in gridPositions)
                 {
-                    gridVisualPosition.Value.Hide();
+                    if (gridVisualPosition.Key != gridPosition && gridVisualPosition.Value.IsActive() == true)
+                    {
+                        gridVisualPosition.Value.Hide();
+                    }
                 }
             }
+            else
+            {
+                gridVisualPosition.Value.Hide();
+            }
+            
         }
     }
     private void ShowListGridVisual()
     {
-        foreach(GridPosition gridPosition in gridPositions)
+        foreach (GridPosition gridPosition in gridPositions)
         {
             gridVisualPositions[gridPosition].Show();
         }
@@ -68,6 +85,9 @@ public class GridSystemVisual : MonoBehaviour
     {
         this.gridPositions = gridPositions;
         HideAllGridVisual();
-        ShowListGridVisual();
+        if (gridPositions.Count > 0)
+        {
+            ShowListGridVisual();
+        }
     }
 }
