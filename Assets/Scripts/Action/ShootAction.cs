@@ -8,7 +8,7 @@ public class ShootAction : BaseAction
 {
     [SerializeField] private int MAX_DISTANCE;
     [SerializeField] private float rotationSpeed;
-    private Unit targetUnit;
+    public Unit targetUnit {  get; private set; }
     private bool canShootBullet;
     public event EventHandler<SetUpBulletProjectile> OnShootAction;
     public class SetUpBulletProjectile : EventArgs
@@ -113,13 +113,13 @@ public class ShootAction : BaseAction
     }
     public override void GetAction(Action onShootComplete, Unit unitAction)
     {
-        base.ActionStart(onShootComplete);
         unit = unitAction;
         targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()))[0];
         state = State.Aiming;
         float timeStateAiming = 1f;
         stateTimer = timeStateAiming;
         canShootBullet = true;
+        base.ActionStart(onShootComplete);
     }
     public override string GetNameAction()
     {

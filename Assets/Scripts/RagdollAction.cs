@@ -11,6 +11,7 @@ public class RagdollAction : MonoBehaviour
     {
         MatchAllChildTranform(unitRootBone, ragdollRootBone);
         ApplyExplosionToRagdoll(ragdollRootBone, 300f, transform.position, 10f, 300f, ForceMode.Force);
+        transform.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Force);
     }
     private void MatchAllChildTranform(Transform unitRootBone, Transform ragdollRootBone)
     {

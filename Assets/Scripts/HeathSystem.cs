@@ -22,6 +22,7 @@ public class HeathSystem : MonoBehaviour
         {
             Dead();
         }
+        OnDamage?.Invoke(this, EventArgs.Empty);
     }
     public void Heal(int healAmount)
     {
@@ -30,5 +31,9 @@ public class HeathSystem : MonoBehaviour
     public void Dead()
     {
         OnDead?.Invoke(this, EventArgs.Empty);
+    }
+    public float GetHealthNormalize()
+    {
+        return (float) heath / heathMax;
     }
 }

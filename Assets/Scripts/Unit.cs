@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
     private HeathSystem heathSystem;
     public BaseAction[] baseActions {  get; private set; }
     public static event EventHandler<int> OnAnyActionPointChange;
+    public event EventHandler OnUnitActionPointChange;
     
     private void Start()
     {
@@ -41,7 +42,7 @@ public class Unit : MonoBehaviour
         if ((isPlayer == true && TurnSystem.Instance.isPlayerTurn == true) || (isPlayer == false && TurnSystem.Instance.isPlayerTurn == false)) 
         {
             actionPoin = MAX_ACTION_POINT;
-            OnAnyActionPointChange(this, MAX_ACTION_POINT);
+            OnAnyActionPointChange?.Invoke(this, MAX_ACTION_POINT);
         }
     }
 
@@ -50,8 +51,9 @@ public class Unit : MonoBehaviour
         GridPosition currentGridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         if (currentGridPosition != gridPosition)
         {
-            LevelGrid.Instance.UnitMoveGridPosition(this, gridPosition, currentGridPosition);
+            GridPosition oldGridPosition = gridPosition;
             gridPosition = currentGridPosition;
+            LevelGrid.Instance.UnitMoveGridPosition(this, oldGridPosition, currentGridPosition);
         }
     }
     public GridPosition GetGridPosition() { return gridPosition; }
@@ -60,6 +62,7 @@ public class Unit : MonoBehaviour
         if (actionPoin >= selectAction.GetActionPointCost() && returnActionPoint == false)
         {
             actionPoin -= selectAction.GetActionPointCost();
+            OnUnitActionPointChange?.Invoke(this, EventArgs.Empty);
             return true;
         }
         else if (returnActionPoint == true)

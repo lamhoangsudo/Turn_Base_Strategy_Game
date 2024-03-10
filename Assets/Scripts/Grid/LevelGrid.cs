@@ -8,6 +8,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private Transform gridDebugPrefab;
     private GridSystem gridSystem;
     public static LevelGrid Instance;
+    public event EventHandler OnUnitMoveGripPositonUpdate;
     private void Awake()
     {
         Instance = this;
@@ -40,6 +41,7 @@ public class LevelGrid : MonoBehaviour
     {
         RemoveUnitAtGridPosition(fromGridPosition, unit);
         AddUnitAtGridPosition(toGridPosition, unit);
+        OnUnitMoveGripPositonUpdate?.Invoke(this, EventArgs.Empty);
     }
     public bool IsValidGridPosition(GridPosition gridPosition)
     {

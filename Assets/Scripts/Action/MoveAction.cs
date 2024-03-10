@@ -82,7 +82,7 @@ public class MoveAction : BaseAction
     public override void GetAction(Action onMoveComplete, Unit unitAction)
     {
         unit = unitAction;
-        base.ActionStart(onMoveComplete);
         this.tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
+        base.ActionStart(onMoveComplete);
     }
 }
