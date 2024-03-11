@@ -12,7 +12,6 @@ public class GridSystemVisualSingle : MonoBehaviour
     public void Show(Material material)
     {
         meshRenderer.material = material;
-        Debug.Log(meshRenderer.material);
         gameObject.SetActive(true);
     }
     public bool IsActive()

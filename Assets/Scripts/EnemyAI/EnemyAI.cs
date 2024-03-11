@@ -75,35 +75,36 @@ public class EnemyAI : MonoBehaviour
 
     private bool TryTakeEnemyAIAction(Action OnEnemyAIActionComplete, Unit enemy)
     {
-        EnemyAIAction enemyAIAction = null;
-        BaseAction action = null;
+        EnemyAIAction bestEnemyAIAction = null;
+        BaseAction bestAction = null;
         foreach(BaseAction baseAction in enemy.baseActions)
         {
             if (enemy.TryToSpendActionPoint(baseAction, false)) 
             {
                 EnemyAIAction checkEnemyAIAction = baseAction.GetBestEnemyAIAction();
-                if (enemyAIAction == null)
+                if (bestEnemyAIAction == null)
                 {
-                    enemyAIAction = checkEnemyAIAction;
-                    action = baseAction;
-                    enemy.TryToSpendActionPoint(baseAction, true);
+                    bestEnemyAIAction = checkEnemyAIAction;
+                    bestAction = baseAction;
+                    
                 }
                 else
                 {
-                    if(checkEnemyAIAction !=  null && checkEnemyAIAction.actionValue > enemyAIAction.actionValue)
+                    if(checkEnemyAIAction !=  null && checkEnemyAIAction.actionValue > bestEnemyAIAction.actionValue)
                     {
-                        enemyAIAction = checkEnemyAIAction;
-                        action = baseAction;
-                        enemy.TryToSpendActionPoint(baseAction, true);
+                        bestEnemyAIAction = checkEnemyAIAction;
+                        bestAction = baseAction;
                     }
                 }
+                enemy.TryToSpendActionPoint(baseAction, true);
             }
         }
-        enemy.selectAction = action;
-        if(enemyAIAction != null 
-            && action != null
+        enemy.selectAction = bestAction;
+        if(bestEnemyAIAction != null 
+            && bestAction != null
             && enemy.TryToSpendActionPoint(enemy.selectAction, false))
         {
+            bestAction.aIAction = bestEnemyAIAction;
             enemy.selectAction.GetAction(OnEnemyAIActionComplete, enemy);
             return true;
         }

@@ -121,7 +121,7 @@ public class ShootAction : BaseAction
         }
         else
         {
-            Vector3 tagetPosition = LevelGrid.Instance.GetGridPosition(GetListValidGridPosition(unit.GetGridPosition())[0]);
+            Vector3 tagetPosition = LevelGrid.Instance.GetGridPosition(aIAction.gridPosition);
             targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(tagetPosition))[0];
         }
         state = State.Aiming;
@@ -140,10 +140,12 @@ public class ShootAction : BaseAction
     }
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
+        Unit tagetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition)[0];
+
         return new EnemyAIAction()
         {
             gridPosition = gridPosition,
-            actionValue = 100
+            actionValue = 100 + Mathf.RoundToInt((1 - tagetUnit.GetHealthAmount()) * 100f)
         };
     }
     public int GetTargetCountAtPosition(GridPosition gridPosition)

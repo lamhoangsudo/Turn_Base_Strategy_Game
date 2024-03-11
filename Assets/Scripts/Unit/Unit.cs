@@ -84,4 +84,8 @@ public class Unit : MonoBehaviour
     {
         heathSystem.Damage(damageAmount);
     }
+    public float GetHealthAmount()
+    {
+        return heathSystem.GetHealthNormalize();
+    }
 }

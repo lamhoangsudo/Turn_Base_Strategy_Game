@@ -9,6 +9,7 @@ public abstract class BaseAction : MonoBehaviour
     public Unit unit { get; protected set; }
     protected bool isActive;
     protected Action OnActionComplete;
+    public EnemyAIAction aIAction; 
     public static event EventHandler OnAnyActionStart;
     public static event EventHandler OnAnyActionComplete;
     protected virtual void Awake()

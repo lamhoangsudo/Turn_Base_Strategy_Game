@@ -53,7 +53,10 @@ public class GridSystemVisual : MonoBehaviour
 
     private void Instance_OnUnitMoveGripPositonUpdate(object sender, System.EventArgs e)
     {
-        UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
+        if (selectUnit != null)
+        {
+            UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
+        }
     }
 
     private void Instance_OnSelectActionChange(object sender, BaseAction e)
@@ -84,7 +87,6 @@ public class GridSystemVisual : MonoBehaviour
             {
                 gridVisualPosition.Value.Hide();
             }
-
         }
     }
     private void ShowListGridVisual()

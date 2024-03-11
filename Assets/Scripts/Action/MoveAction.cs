@@ -82,7 +82,14 @@ public class MoveAction : BaseAction
     public override void GetAction(Action onMoveComplete, Unit unitAction)
     {
         unit = unitAction;
-        this.tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
+        if (unit.IsPlayer())
+        {
+            this.tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
+        }
+        else
+        {
+            this.tagetPosition = LevelGrid.Instance.GetGridPosition(aIAction.gridPosition);
+        }
         base.ActionStart(onMoveComplete);
     }
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
