@@ -69,10 +69,6 @@ public class ShootAction : BaseAction
                 break;
         }
     }
-    private void Cooloff()
-    {
-
-    }
     private void Shoot()
     {
         OnShootAction?.Invoke(this, new SetUpBulletProjectile
@@ -80,7 +76,7 @@ public class ShootAction : BaseAction
             tagetUnit = targetUnit,
             shootingUnit = unit
         });
-        targetUnit.DamageUnit(100);
+        targetUnit.DamageUnit(20);
     }
     private void Aim()
     {
@@ -88,8 +84,13 @@ public class ShootAction : BaseAction
     }
     public override List<GridPosition> GetListValidGridPosition()
     {
-        List<GridPosition> gridPositionsValid = new();
         GridPosition unitGridPosition = unit.GetGridPosition();
+        return GetListValidGridPosition(unitGridPosition);
+    }
+    public List<GridPosition> GetListValidGridPosition(GridPosition unitGridPosition)
+    {
+        List<GridPosition> gridPositionsValid = new();
+        
         for (int x = -MAX_DISTANCE; x <= MAX_DISTANCE; x++)
         {
             for (int z = -MAX_DISTANCE; z <= MAX_DISTANCE; z++)
@@ -114,7 +115,15 @@ public class ShootAction : BaseAction
     public override void GetAction(Action onShootComplete, Unit unitAction)
     {
         unit = unitAction;
-        targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()))[0];
+        if (unit.IsPlayer())
+        {
+            targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()))[0];
+        }
+        else
+        {
+            Vector3 tagetPosition = LevelGrid.Instance.GetGridPosition(GetListValidGridPosition(unit.GetGridPosition())[0]);
+            targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(tagetPosition))[0];
+        }
         state = State.Aiming;
         float timeStateAiming = 1f;
         stateTimer = timeStateAiming;
@@ -128,5 +137,17 @@ public class ShootAction : BaseAction
     private bool InsideCircleRange(GridPosition position)
     {
         return Mathf.Pow((unit.GetGridPosition().x - position.x), 2) + Mathf.Pow((unit.GetGridPosition().z - position.z), 2) <= Mathf.Pow(MAX_DISTANCE + 0.5f, 2);
+    }
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        return new EnemyAIAction()
+        {
+            gridPosition = gridPosition,
+            actionValue = 100
+        };
+    }
+    public int GetTargetCountAtPosition(GridPosition gridPosition)
+    {
+        return GetListValidGridPosition(gridPosition).Count;
     }
 }

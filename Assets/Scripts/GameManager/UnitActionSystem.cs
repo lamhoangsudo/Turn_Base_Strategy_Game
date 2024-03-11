@@ -38,7 +38,7 @@ public class UnitActionSystem : MonoBehaviour
                 && selectAction.IsValidGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon())))
             {
                 selectUnit.selectAction = selectAction;
-                selectAction.GetAction(() => { OnBusyChange?.Invoke(this, false); isBusy = false; }, selectUnit);
+                selectUnit.selectAction.GetAction(() => { OnBusyChange?.Invoke(this, false); isBusy = false; }, selectUnit);
                 if (selectAction.IsActive())
                 {
                     OnActionPointChange?.Invoke(this, selectUnit.GetActionPoint());
@@ -46,7 +46,7 @@ public class UnitActionSystem : MonoBehaviour
                 }
                 else
                 {
-                    selectUnit.TryToSpendActionPoint(selectAction, true);
+                    selectUnit.TryToSpendActionPoint(selectAction, false);
                 }
             }
         }

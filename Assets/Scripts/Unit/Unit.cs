@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
     private GridPosition gridPosition;
     public MoveAction moveAction { get; private set; }
     public SpinAction spinAction { get; private set; }
+    public ShootAction shootAction { get; private set; }
     [SerializeField] private int actionPoin;
     [SerializeField] private bool isPlayer;
     public BaseAction selectAction;
@@ -17,6 +18,8 @@ public class Unit : MonoBehaviour
     public BaseAction[] baseActions {  get; private set; }
     public static event EventHandler<int> OnAnyActionPointChange;
     public event EventHandler OnUnitActionPointChange;
+    public static event EventHandler OnUnitSwapned;
+    public static event EventHandler OnUnitDead;
     
     private void Start()
     {
@@ -25,19 +28,22 @@ public class Unit : MonoBehaviour
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
         moveAction = GetComponent<MoveAction>();
         spinAction = GetComponent<SpinAction>();
+        shootAction = GetComponent<ShootAction>();
         baseActions = GetComponents<BaseAction>();
-        TurnSystem.Instance.OnTurnNumberChange += Instance_OnTurnNumberChange;
+        TurnSystem.Instance.OnTurnChange += Instance_OnTurnChange;
         heathSystem = GetComponent<HeathSystem>();
         heathSystem.OnDead += Unit_OnDead;
+        OnUnitSwapned?.Invoke(this, EventArgs.Empty);
     }
 
     private void Unit_OnDead(object sender, EventArgs e)
     {
+        OnUnitDead?.Invoke(this, EventArgs.Empty);
         LevelGrid.Instance.RemoveUnitAtGridPosition(gridPosition, this);
         Destroy(this.gameObject);
     }
 
-    private void Instance_OnTurnNumberChange(object sender, System.EventArgs e)
+    private void Instance_OnTurnChange(object sender, System.EventArgs e)
     {
         if ((isPlayer == true && TurnSystem.Instance.isPlayerTurn == true) || (isPlayer == false && TurnSystem.Instance.isPlayerTurn == false)) 
         {

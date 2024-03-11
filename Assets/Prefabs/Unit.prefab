@@ -771,7 +771,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da3b8515ed9562444a3cef9787deb09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MAX_DISTANCE: 2
+  MAX_DISTANCE: 7
   rotationSpeed: 7
 --- !u!114 &6145222266953834277
 MonoBehaviour:

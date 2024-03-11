@@ -85,4 +85,13 @@ public class MoveAction : BaseAction
         this.tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
         base.ActionStart(onMoveComplete);
     }
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        int targetCountAtPosition = unit.shootAction.GetTargetCountAtPosition(gridPosition);
+        return new EnemyAIAction()
+        {
+            gridPosition = gridPosition,
+            actionValue = targetCountAtPosition * 10
+        };
+    }
 }

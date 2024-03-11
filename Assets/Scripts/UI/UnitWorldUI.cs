@@ -13,7 +13,7 @@ public class UnitWorldUI : MonoBehaviour
     private void Start()
     {
         unit.OnUnitActionPointChange += Unit_OnUnitActionPointChange;
-        TurnSystem.Instance.OnTurnNumberChange += TurnSystem_OnTurnNumberChange;
+        TurnSystem.Instance.OnTurnChange += TurnSystem_OnTurnChange;
         heathSystem.OnDamage += HeathSystem_OnDamage;
         UpdateActionPointText();
         UpdateHealthBar();
@@ -24,7 +24,7 @@ public class UnitWorldUI : MonoBehaviour
         UpdateHealthBar();
     }
 
-    private void TurnSystem_OnTurnNumberChange(object sender, System.EventArgs e)
+    private void TurnSystem_OnTurnChange(object sender, System.EventArgs e)
     {
         if (TurnSystem.Instance.turnNumber != 0)
         {

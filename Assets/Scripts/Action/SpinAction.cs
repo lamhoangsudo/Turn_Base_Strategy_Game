@@ -32,4 +32,12 @@ public class SpinAction : BaseAction
         totalSpin = 0f;
         base.ActionStart(onSpinComplete);
     }
+    public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
+    {
+        return new EnemyAIAction()
+        {
+            gridPosition = gridPosition,
+            actionValue = 0
+        };
+    }
 }
