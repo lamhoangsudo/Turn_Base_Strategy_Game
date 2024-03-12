@@ -7,9 +7,6 @@ using UnityEngine;
 public class Unit : MonoBehaviour
 {
     private GridPosition gridPosition;
-    public MoveAction moveAction { get; private set; }
-    public SpinAction spinAction { get; private set; }
-    public ShootAction shootAction { get; private set; }
     [SerializeField] private int actionPoin;
     [SerializeField] private bool isPlayer;
     public BaseAction selectAction;
@@ -26,16 +23,23 @@ public class Unit : MonoBehaviour
         actionPoin = MAX_ACTION_POINT;
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
         LevelGrid.Instance.AddUnitAtGridPosition(gridPosition, this);
-        moveAction = GetComponent<MoveAction>();
-        spinAction = GetComponent<SpinAction>();
-        shootAction = GetComponent<ShootAction>();
         baseActions = GetComponents<BaseAction>();
         TurnSystem.Instance.OnTurnChange += Instance_OnTurnChange;
         heathSystem = GetComponent<HeathSystem>();
         heathSystem.OnDead += Unit_OnDead;
         OnUnitSwapned?.Invoke(this, EventArgs.Empty);
     }
-
+    public T GetAction<T> () where T : BaseAction
+    {
+        foreach (var baseAction in baseActions) 
+        { 
+            if(baseAction is T t)
+            {
+                return t;
+            }
+        }
+        return null;
+    }
     private void Unit_OnDead(object sender, EventArgs e)
     {
         OnUnitDead?.Invoke(this, EventArgs.Empty);

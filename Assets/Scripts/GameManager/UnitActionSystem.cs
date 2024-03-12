@@ -61,7 +61,7 @@ public class UnitActionSystem : MonoBehaviour
                 if (hitInfo.transform.TryGetComponent<Unit>(out Unit unit) && unit.IsPlayer() == true && TurnSystem.Instance.isPlayerTurn == true)
                 {
                     this.selectUnit = unit;
-                    this.selectAction = unit.moveAction;
+                    this.selectAction = unit.GetAction<MoveAction>();
                     unit.selectAction = this.selectAction;
                     OnSelectUnitChange?.Invoke(this, selectUnit);
                     OnSelectActionChange?.Invoke(this, selectAction);
