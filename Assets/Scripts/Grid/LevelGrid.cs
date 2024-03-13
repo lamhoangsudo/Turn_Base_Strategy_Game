@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    [SerializeField] private Transform gridDebugPrefab;
+    //[SerializeField] private Transform gridDebugPrefab;
     private GridSystem<GridObject> gridSystem;
     public static LevelGrid Instance;
     public event EventHandler OnUnitMoveGripPositonUpdate;
@@ -13,7 +13,7 @@ public class LevelGrid : MonoBehaviour
     {
         Instance = this;
         gridSystem = new (10, 10, 2f, (GridPosition p, GridSystem<GridObject> s) => new GridObject(p, s));
-        gridSystem.CreateGridDebugObject(gridDebugPrefab);
+        //gridSystem.CreateGridDebugObject(gridDebugPrefab);
     }
     public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
     {

@@ -38,9 +38,9 @@ public class GridSystem<TGridObject>
         {
             for (int z = 0; z < height; z++)
             {
-                GridPosition gridPosition = new GridPosition(x, z);
+                GridPosition gridPosition = new(x, z);
                 Transform gridDebugTransform = GameObject.Instantiate(gridDebugObj, GetWorldPosition(gridPosition), Quaternion.identity);
-                gridDebugTransform.GetComponent<GridDebugObject>().SetGridObject(GetGridObject(gridPosition) as GridObject);
+                gridDebugTransform.GetComponent<GridDebugObject>().SetGridObject(GetGridObject(gridPosition));
             }
         }
     }
