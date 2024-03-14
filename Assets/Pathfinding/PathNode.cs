@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class PathNode
 {
-    private GridPosition gridPosition;
-    public int gCost {  get; private set; } = 0;
-    public int hCost { get; private set; } = 0;
-    public int fCost { get; private set; } = 0;
-    private PathNode cameFromPathNode;
+    public GridPosition gridPosition {  get; private set; }
+    public int gCost;
+    public int hCost;
+    public int fCost {  get; private set; }
+    public PathNode cameFromPathNode;
 
     public PathNode(GridPosition gridPosition)
     {
@@ -18,5 +18,13 @@ public class PathNode
     public override string ToString()
     {
         return gridPosition.ToString();
+    }
+    public void CalculateFCost()
+    {
+        fCost = gCost + hCost;
+    }
+    public void ResetCameFromPathNode()
+    {
+        cameFromPathNode = null;
     }
 }
