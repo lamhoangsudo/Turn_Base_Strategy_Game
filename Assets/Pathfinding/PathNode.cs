@@ -8,6 +8,7 @@ public class PathNode
     public int gCost;
     public int hCost;
     public int fCost {  get; private set; }
+    public bool isWalkable = true;
     public PathNode cameFromPathNode;
 
     public PathNode(GridPosition gridPosition)
