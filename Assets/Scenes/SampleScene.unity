@@ -2909,6 +2909,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5352883394388975028, guid: 9c1da819d50234e41a5748f85c6ea87f,
+        type: 3}
+      propertyPath: maxMoveDistance
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5557019275092520731, guid: 9c1da819d50234e41a5748f85c6ea87f,
         type: 3}
       propertyPath: m_IsTrigger

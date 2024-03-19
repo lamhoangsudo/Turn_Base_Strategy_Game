@@ -34,19 +34,21 @@ public class UnitActionSystem : MonoBehaviour
         {
             if (selectUnit != null 
                 && selectAction != null 
-                && selectUnit.TryToSpendActionPoint(selectAction, false )
                 && selectAction.IsValidGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon())))
             {
-                selectUnit.selectAction = selectAction;
-                selectUnit.selectAction.GetAction(() => { OnBusyChange?.Invoke(this, false); isBusy = false; }, selectUnit);
-                if (selectAction.IsActive())
+                if (selectUnit.TryToSpendActionPoint(selectAction, false))
                 {
-                    OnActionPointChange?.Invoke(this, selectUnit.GetActionPoint());
-                    OnBusyChange?.Invoke(this, true);
-                }
-                else
-                {
-                    selectUnit.TryToSpendActionPoint(selectAction, false);
+                    selectUnit.selectAction = selectAction;
+                    selectUnit.selectAction.GetAction(() => { OnBusyChange?.Invoke(this, false); isBusy = false; }, selectUnit);
+                    if (selectAction.IsActive())
+                    {
+                        OnActionPointChange?.Invoke(this, selectUnit.GetActionPoint());
+                        OnBusyChange?.Invoke(this, true);
+                    }
+                    else
+                    {
+                        selectUnit.TryToSpendActionPoint(selectAction, true);
+                    }
                 }
             }
         }
