@@ -773,6 +773,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MAX_DISTANCE: 7
   rotationSpeed: 7
+  wall:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!114 &6145222266953834277
 MonoBehaviour:
   m_ObjectHideFlags: 0

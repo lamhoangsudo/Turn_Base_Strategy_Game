@@ -9,15 +9,15 @@ public class MoveAction : BaseAction
     [SerializeField] private float moveSpeed;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private int maxMoveDistance;
-    private Vector3 tagetPosition;
+    private List<GridPosition> listPosition;
     private const float tagetPositionDistance = 0.1f;
     private bool unitIsMoving;
     private const string actionName = "Move";
     public event EventHandler OnStartAction;
     public event EventHandler OnStopAction;
+    private int currentIndex;
     private void Start()
     {
-        tagetPosition = transform.position;
     }
     private void Update()
     {
@@ -29,6 +29,8 @@ public class MoveAction : BaseAction
         {
             return;
         }
+        Debug.Log(currentIndex);
+        Vector3 tagetPosition = LevelGrid.Instance.GetGridPosition(listPosition[currentIndex]);
         Vector3 moveDir = (tagetPosition - this.transform.position).normalized;
         if (Vector3.Distance(tagetPosition, this.transform.position) > tagetPositionDistance)
         {
@@ -41,9 +43,13 @@ public class MoveAction : BaseAction
         }
         else
         {
-            base.ActionComplete();
-            OnStopAction?.Invoke(this, EventArgs.Empty);
-            unitIsMoving = false;
+            currentIndex++;
+            if (currentIndex >= listPosition.Count)
+            {
+                base.ActionComplete();
+                OnStopAction?.Invoke(this, EventArgs.Empty);
+                unitIsMoving = false;
+            }
         }
     }
     public override bool IsValidGridPosition(GridPosition gridPosition)
@@ -61,7 +67,10 @@ public class MoveAction : BaseAction
                 GridPosition validGridPosition = unitGridPosition + new GridPosition(x, z);
                 if (LevelGrid.Instance.IsValidGridPosition(validGridPosition)
                     && validGridPosition != unitGridPosition
-                    && !LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition))
+                    && !LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)
+                    && Pathfinding.instance.IsWalkable(validGridPosition)
+                    && Pathfinding.instance.FindPath(unitGridPosition, validGridPosition, out int pathLength) != null
+                    && pathLength < maxMoveDistance * 10)
                 {
                     gridPositionsValid.Add(validGridPosition);
                 };
@@ -82,13 +91,15 @@ public class MoveAction : BaseAction
     public override void GetAction(Action onMoveComplete, Unit unitAction)
     {
         unit = unitAction;
+        listPosition = new();
+        currentIndex = 0;
         if (unit.IsPlayer())
         {
-            this.tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
+            listPosition = Pathfinding.instance.FindPath(unitAction.GetGridPosition(), LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()), out _);
         }
         else
         {
-            this.tagetPosition = LevelGrid.Instance.GetGridPosition(aIAction.gridPosition);
+            listPosition = Pathfinding.instance.FindPath(unitAction.GetGridPosition(), aIAction.gridPosition, out _);
         }
         base.ActionStart(onMoveComplete);
     }

@@ -41,7 +41,7 @@ public class Pathfinding : MonoBehaviour
             }
         }
     }
-    public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition)
+    public List<GridPosition> FindPath(GridPosition startGridPosition, GridPosition endGridPosition, out int pathLength)
     {
         List<PathNode> openNode = new();
         List<PathNode> closeNode = new();
@@ -67,6 +67,7 @@ public class Pathfinding : MonoBehaviour
             PathNode currentNode = GetLowestFcostPathNode(openNode);
             if (currentNode == endNode)
             {
+                pathLength = endNode.fCost;
                 return CalculatePath(endNode);
             }
             else
@@ -100,6 +101,7 @@ public class Pathfinding : MonoBehaviour
             }
         }
         //no path found
+        pathLength = 0;
         return null;
     }
     public int CalculateDistance(GridPosition a, GridPosition b)
@@ -130,36 +132,45 @@ public class Pathfinding : MonoBehaviour
     {
         List<PathNode> neighborList = new();
         GridPosition currentPosition = currentNode.gridPosition;
-        if (currentPosition.x >= 0)
+        if (currentPosition.x - 1 >= 0)
         {
             //Left
             neighborList.Add(GetNode(currentPosition.x - 1, currentPosition.z + 0));
-            if (currentPosition.z >= 0)
+            if (currentPosition.z - 1 >= 0)
             {
                 //LeftDown
                 neighborList.Add(GetNode(currentPosition.x - 1, currentPosition.z - 1));
             }
-            if (currentPosition.z < gridSystem.height)
+            if (currentPosition.z + 1 < gridSystem.height)
             {
                 //LeftUp
                 neighborList.Add(GetNode(currentPosition.x - 1, currentPosition.z + 1));
             }
         }
-        if (currentPosition.x < gridSystem.width)
+        if (currentPosition.x + 1 < gridSystem.width)
         {
             //Right
             neighborList.Add(GetNode(currentPosition.x + 1, currentPosition.z + 0));
-            if (currentPosition.z >= 0)
+            if (currentPosition.z - 1 >= 0)
             {
                 //RightDown
                 neighborList.Add(GetNode(currentPosition.x + 1, currentPosition.z - 1));
             }
-            if (currentPosition.z < gridSystem.height)
+            if (currentPosition.z + 1 < gridSystem.height)
             {
                 //RightUp
                 neighborList.Add(GetNode(currentPosition.x + 1, currentPosition.z + 1));
             }
-
+        }
+        if (currentPosition.z - 1 >= 0)
+        {
+            //RightDown
+            neighborList.Add(GetNode(currentPosition.x, currentPosition.z - 1));
+        }
+        if (currentPosition.z + 1 < gridSystem.height)
+        {
+            //RightUp
+            neighborList.Add(GetNode(currentPosition.x, currentPosition.z + 1));
         }
         return neighborList;
     }
@@ -180,5 +191,9 @@ public class Pathfinding : MonoBehaviour
             pathList.Add(pathNode.gridPosition);
         }
         return pathList;
+    }
+    public bool IsWalkable(GridPosition gridPosition)
+    {
+        return gridSystem.GetGridObject(gridPosition).isWalkable;
     }
 }

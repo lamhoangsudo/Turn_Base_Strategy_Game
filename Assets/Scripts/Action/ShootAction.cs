@@ -8,6 +8,7 @@ public class ShootAction : BaseAction
 {
     [SerializeField] private int MAX_DISTANCE;
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private LayerMask wall;
     public Unit targetUnit {  get; private set; }
     private bool canShootBullet;
     public event EventHandler<SetUpBulletProjectile> OnShootAction;
@@ -100,7 +101,11 @@ public class ShootAction : BaseAction
                     && LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)
                     && validGridPosition != unitGridPosition
                     && unit.IsPlayer() != LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()
-                    && InsideCircleRange(validGridPosition))
+                    && InsideCircleRange(validGridPosition)
+                    && !Physics.Raycast(LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f,
+                        (LevelGrid.Instance.GetGridPosition(targetUnit.GetGridPosition()) - LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())).normalized,
+                        Vector3.Distance(LevelGrid.Instance.GetGridPosition(targetUnit.GetGridPosition()), LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())),
+                        wall))
                 {
                     gridPositionsValid.Add(validGridPosition);
                 }
