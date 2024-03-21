@@ -9,8 +9,9 @@ public class ShootAction : BaseAction
     [SerializeField] private int MAX_DISTANCE;
     [SerializeField] private float rotationSpeed;
     [SerializeField] private LayerMask wall;
-    public Unit targetUnit {  get; private set; }
+    public Unit targetUnit { get; private set; }
     private bool canShootBullet;
+    public static event EventHandler OnAnyShootAction;
     public event EventHandler<SetUpBulletProjectile> OnShootAction;
     public class SetUpBulletProjectile : EventArgs
     {
@@ -72,6 +73,7 @@ public class ShootAction : BaseAction
     }
     private void Shoot()
     {
+        OnAnyShootAction?.Invoke(this, EventArgs.Empty);
         OnShootAction?.Invoke(this, new SetUpBulletProjectile
         {
             tagetUnit = targetUnit,
@@ -91,21 +93,22 @@ public class ShootAction : BaseAction
     public List<GridPosition> GetListValidGridPosition(GridPosition unitGridPosition)
     {
         List<GridPosition> gridPositionsValid = new();
-        
+
         for (int x = -MAX_DISTANCE; x <= MAX_DISTANCE; x++)
         {
             for (int z = -MAX_DISTANCE; z <= MAX_DISTANCE; z++)
             {
                 GridPosition validGridPosition = unitGridPosition + new GridPosition(x, z);
-                if (LevelGrid.Instance.IsValidGridPosition(validGridPosition)
-                    && LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)
-                    && validGridPosition != unitGridPosition
-                    && unit.IsPlayer() != LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()
-                    && InsideCircleRange(validGridPosition)
-                    && !Physics.Raycast(LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f,
-                        (LevelGrid.Instance.GetGridPosition(targetUnit.GetGridPosition()) - LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())).normalized,
-                        Vector3.Distance(LevelGrid.Instance.GetGridPosition(targetUnit.GetGridPosition()), LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())),
-                        wall))
+                Debug.Log(validGridPosition);
+                if (!LevelGrid.Instance.IsValidGridPosition(validGridPosition)) continue;
+                if (!LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)) continue;
+                if (validGridPosition == unitGridPosition) continue;
+                if (unit.IsPlayer() == LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()) continue;
+                if (!InsideCircleRange(validGridPosition)) continue;
+                if (Physics.Raycast(LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f,
+                        (LevelGrid.Instance.GetGridPosition(validGridPosition) - LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())).normalized,
+                        Vector3.Distance(LevelGrid.Instance.GetGridPosition(validGridPosition) + Vector3.up * 1.7f, LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f),
+                        wall)) continue;
                 {
                     gridPositionsValid.Add(validGridPosition);
                 }
