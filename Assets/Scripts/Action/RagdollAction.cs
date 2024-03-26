@@ -10,7 +10,8 @@ public class RagdollAction : MonoBehaviour
     public void SetUp(Transform unitRootBone)
     {
         MatchAllChildTranform(unitRootBone, ragdollRootBone);
-        ApplyExplosionToRagdoll(ragdollRootBone, 300f, transform.position, 10f, 300f, ForceMode.Force);
+        Vector3 ramdomDir = new(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
+        ApplyExplosionToRagdoll(ragdollRootBone, 300f, transform.position + ramdomDir, 10f, 300f, ForceMode.Force);
         transform.GetComponent<Rigidbody>().AddForce(transform.forward * 2f, ForceMode.Force);
     }
     private void MatchAllChildTranform(Transform unitRootBone, Transform ragdollRootBone)

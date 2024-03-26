@@ -1,4 +1,5 @@
 using Cinemachine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,12 @@ public class ScreenShake : MonoBehaviour
     private void Start()
     {
         ShootAction.OnAnyShootAction += ShootAction_OnAnyShootAction;
+        GrenadeProjectileAction.OnAnyGrenadeexploded += GrenadeProjectileAction_OnAnyGrenadeexploded;
+    }
+
+    private void GrenadeProjectileAction_OnAnyGrenadeexploded(object sender, EventArgs e)
+    {
+        Shake(6f);
     }
 
     private void ShootAction_OnAnyShootAction(object sender, System.EventArgs e)
