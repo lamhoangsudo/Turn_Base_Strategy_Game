@@ -833,6 +833,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76b05562e88c3e24aaccee8c9a2ffd1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grenadeAmount: 5
+  MAX_DISTANCE: 5
+  wall:
+    serializedVersion: 2
+    m_Bits: 0
+  grenadePrefab: {fileID: 6778994590378035647, guid: ffc94ef24686fd242a7d120987fa44fa,
+    type: 3}
 --- !u!1001 &6411649965754705190
 PrefabInstance:
   m_ObjectHideFlags: 0
