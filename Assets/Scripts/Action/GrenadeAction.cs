@@ -36,7 +36,7 @@ public class GrenadeAction : BaseAction
                 if (!LevelGrid.Instance.IsValidGridPosition(validGridPosition)) continue;
                 if (!LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)) continue;
                 if (validGridPosition == unitGridPosition) continue;
-                if (unit.IsPlayer() == LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()) continue;
+                //if (unit.IsPlayer() == LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()) continue;
                 if (!InsideCircleRange(validGridPosition)) continue;
                 if (Physics.Raycast(LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f,
                         (LevelGrid.Instance.GetGridPosition(validGridPosition) - LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())).normalized,
