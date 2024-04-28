@@ -9,7 +9,7 @@ public abstract class BaseAction : MonoBehaviour
     public Unit unit { get; protected set; }
     protected bool isActive;
     protected Action OnActionComplete;
-    public EnemyAIAction aIAction; 
+    public EnemyAIAction aIAction;
     public static event EventHandler OnAnyActionStart;
     public static event EventHandler OnAnyActionComplete;
     protected virtual void Awake()
@@ -18,8 +18,9 @@ public abstract class BaseAction : MonoBehaviour
     }
     public abstract string GetNameAction();
     public abstract void GetAction(Action OnActionComplete, Unit unitAction);
-    public virtual List<GridPosition> GetListValidGridPosition() 
+    public virtual List<GridPosition> GetListValidGridPosition(out List<GridPosition> range)
     {
+        range = new List<GridPosition>();
         return new() { unit.GetGridPosition() };
     }
     public virtual bool IsValidGridPosition(GridPosition gridPosition)
@@ -49,8 +50,8 @@ public abstract class BaseAction : MonoBehaviour
     public EnemyAIAction GetBestEnemyAIAction()
     {
         List<EnemyAIAction> enemyAIActions = new List<EnemyAIAction>();
-        List<GridPosition> validActionGridPositionList = GetListValidGridPosition();
-        foreach(GridPosition gridPosition in validActionGridPositionList)
+        List<GridPosition> validActionGridPositionList = GetListValidGridPosition(out _);
+        foreach (GridPosition gridPosition in validActionGridPositionList)
         {
             EnemyAIAction enemyAIAction = GetEnemyAIAction(gridPosition);
             enemyAIActions.Add(enemyAIAction);

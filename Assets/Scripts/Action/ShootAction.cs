@@ -85,40 +85,40 @@ public class ShootAction : BaseAction
     {
         unit.transform.forward = Vector3.Slerp(unit.transform.forward, (targetUnit.transform.position - unit.transform.position).normalized, Time.deltaTime * rotationSpeed);
     }
-    public override List<GridPosition> GetListValidGridPosition()
+    public override List<GridPosition> GetListValidGridPosition(out List<GridPosition> range)
     {
         GridPosition unitGridPosition = unit.GetGridPosition();
-        return GetListValidGridPosition(unitGridPosition);
+        List<GridPosition> enemy = GetListValidGridPosition(unitGridPosition, out List<GridPosition> ranges);
+        range = ranges;
+        return enemy;
     }
-    public List<GridPosition> GetListValidGridPosition(GridPosition unitGridPosition)
+    public List<GridPosition> GetListValidGridPosition(GridPosition unitGridPosition, out List<GridPosition> range)
     {
         List<GridPosition> gridPositionsValid = new();
-
+        range = new();
         for (int x = -MAX_DISTANCE; x <= MAX_DISTANCE; x++)
         {
             for (int z = -MAX_DISTANCE; z <= MAX_DISTANCE; z++)
             {
                 GridPosition validGridPosition = unitGridPosition + new GridPosition(x, z);
-                Debug.Log(validGridPosition);
                 if (!LevelGrid.Instance.IsValidGridPosition(validGridPosition)) continue;
-                if (!LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)) continue;
                 if (validGridPosition == unitGridPosition) continue;
-                if (unit.IsPlayer() == LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()) continue;
-                if (!InsideCircleRange(validGridPosition)) continue;
                 if (Physics.Raycast(LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f,
-                        (LevelGrid.Instance.GetGridPosition(validGridPosition) - LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())).normalized,
-                        Vector3.Distance(LevelGrid.Instance.GetGridPosition(validGridPosition) + Vector3.up * 1.7f, LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f),
-                        wall)) continue;
-                {
-                    gridPositionsValid.Add(validGridPosition);
-                }
+                    (LevelGrid.Instance.GetGridPosition(validGridPosition) - LevelGrid.Instance.GetGridPosition(unit.GetGridPosition())).normalized,
+                    Vector3.Distance(LevelGrid.Instance.GetGridPosition(validGridPosition) + Vector3.up * 1.7f, LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f),
+                    wall)) continue;
+                if (!InsideCircleRange(validGridPosition)) continue;
+                range.Add(validGridPosition);
+                if (!LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)) continue;
+                if (unit.IsPlayer() == LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()) continue;
+                gridPositionsValid.Add(validGridPosition);
             }
         }
         return gridPositionsValid;
     }
     public override bool IsValidGridPosition(GridPosition gridPosition)
     {
-        return GetListValidGridPosition().Contains(gridPosition);
+        return GetListValidGridPosition(out _).Contains(gridPosition);
     }
     public override void GetAction(Action onShootComplete, Unit unitAction)
     {
@@ -157,6 +157,6 @@ public class ShootAction : BaseAction
     }
     public int GetTargetCountAtPosition(GridPosition gridPosition)
     {
-        return GetListValidGridPosition(gridPosition).Count;
+        return GetListValidGridPosition(gridPosition, out _).Count;
     }
 }

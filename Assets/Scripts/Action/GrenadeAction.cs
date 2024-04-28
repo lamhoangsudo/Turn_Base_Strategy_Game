@@ -5,22 +5,33 @@ using UnityEngine;
 
 public class GrenadeAction : BaseAction
 {
-    [SerializeField] private int grenadeAmount;
     [SerializeField] private int MAX_DISTANCE;
+    [SerializeField] private int MIN_DISTANCE;
     [SerializeField] private LayerMask wall;
     [SerializeField] private Transform grenadePrefab;
     public Unit targetUnit { get; private set; }
     private bool InsideCircleRange(GridPosition position)
     {
-        return Mathf.Pow((unit.GetGridPosition().x - position.x), 2) + Mathf.Pow((unit.GetGridPosition().z - position.z), 2) <= Mathf.Pow(MAX_DISTANCE + 0.5f, 2);
+        float min = Mathf.Pow(MIN_DISTANCE + 0.5f, 2);
+        float max = Mathf.Pow(MAX_DISTANCE + 0.5f, 2);
+        float check = Mathf.Pow((unit.GetGridPosition().x - position.x), 2) + Mathf.Pow((unit.GetGridPosition().z - position.z), 2);
+        if (check >= min && check <= max)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     public override bool IsValidGridPosition(GridPosition gridPosition)
     {
-        return GetListValidGridPosition().Contains(gridPosition);
+        return GetListValidGridPosition(out _).Contains(gridPosition);
     }
-    public override List<GridPosition> GetListValidGridPosition()
+    public override List<GridPosition> GetListValidGridPosition(out List<GridPosition> range)
     {
         GridPosition unitGridPosition = unit.GetGridPosition();
+        range = new();
         return GetListValidGridPosition(unitGridPosition);
     }
     public List<GridPosition> GetListValidGridPosition(GridPosition unitGridPosition)
@@ -34,7 +45,7 @@ public class GrenadeAction : BaseAction
                 GridPosition validGridPosition = unitGridPosition + new GridPosition(x, z);
                 Debug.Log(validGridPosition);
                 if (!LevelGrid.Instance.IsValidGridPosition(validGridPosition)) continue;
-                if (!LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)) continue;
+                //if (!LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)) continue;
                 if (validGridPosition == unitGridPosition) continue;
                 //if (unit.IsPlayer() == LevelGrid.Instance.GetUnitAtGridPosition(validGridPosition)[0].IsPlayer()) continue;
                 if (!InsideCircleRange(validGridPosition)) continue;
@@ -52,17 +63,20 @@ public class GrenadeAction : BaseAction
     public override void GetAction(Action OnThrowActionComplete, Unit unitAction)
     {
         unit = unitAction;
+        _ = new Vector3(0, 0, 0);
+        Vector3 tagetPosition;
         if (unit.IsPlayer())
         {
-            targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()))[0];
+            tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
         }
         else
         {
-            Vector3 tagetPosition = LevelGrid.Instance.GetGridPosition(aIAction.gridPosition);
+            tagetPosition = LevelGrid.Instance.GetGridPosition(aIAction.gridPosition);
             targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(tagetPosition))[0];
+            tagetPosition = targetUnit.transform.position;
         }
         Transform grenade = Instantiate(grenadePrefab, unit.transform.position, Quaternion.identity);
-        grenade.GetComponent<GrenadeProjectileAction>().SetUp(targetUnit.transform.position, OnThrowActionComplete);
+        grenade.GetComponent<GrenadeProjectileAction>().SetUp(tagetPosition, OnThrowActionComplete);
         base.ActionStart(OnThrowActionComplete);
     }
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)

@@ -11,6 +11,7 @@ public class GridSystemVisual : MonoBehaviour
     private Dictionary<GridPosition, GridSystemVisualSingle> gridVisualPositions;
     public static GridSystemVisual Instance;
     private List<GridPosition> gridPositions;
+    private List<GridPosition> range;
     private Unit selectUnit;
     [SerializeField] private List<GridVisualMaterial> materials;
     private Material gridMaterial;
@@ -35,6 +36,7 @@ public class GridSystemVisual : MonoBehaviour
     }
     private void Start()
     {
+        range = new List<GridPosition>();
         LevelGrid.Instance.GetWidthAndHeight(out int width, out int height);
         for (int x = 0; x < width; x++)
         {
@@ -55,29 +57,35 @@ public class GridSystemVisual : MonoBehaviour
     {
         if (selectUnit != null)
         {
-            UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
+            gridPositions = selectUnit.selectAction.GetListValidGridPosition(out _);
+            HideAllGridVisual(gridPositions);
+            UpdateVisual(gridPositions);
         }
     }
 
     private void Instance_OnSelectActionChange(object sender, BaseAction e)
     {
         SetMaterial();
-        UpdateVisual(selectUnit.selectAction.GetListValidGridPosition());
+        gridPositions = selectUnit.selectAction.GetListValidGridPosition(out List<GridPosition> ranges);
+        range = ranges;
+        HideAllGridVisual(range);
+        HideAllGridVisual(gridPositions);
+        UpdateVisual(gridPositions);
     }
 
     private void Instance_OnSelectUnitChange(object sender, Unit selectUnit)
     {
         this.selectUnit = selectUnit;
     }
-    private void HideAllGridVisual()
+    private void HideAllGridVisual(List<GridPosition> gridVisuals)
     {
         foreach (var gridVisualPosition in gridVisualPositions)
         {
-            if (gridPositions.Count > 0)
+            if (gridVisuals.Count > 0)
             {
-                foreach (GridPosition gridPosition in gridPositions)
+                foreach (GridPosition gridPosition in gridVisuals)
                 {
-                    if (gridVisualPosition.Key != gridPosition && gridVisualPosition.Value.IsActive() == true)
+                    if (gridPosition != gridVisualPosition.Key && gridVisualPosition.Value.IsActive() == true)
                     {
                         gridVisualPosition.Value.Hide();
                     }
@@ -96,14 +104,27 @@ public class GridSystemVisual : MonoBehaviour
             gridVisualPositions[gridPosition].Show(gridMaterial);
         }
     }
+    private void ShowListRangeGridVisual()
+    {
+        foreach (GridPosition gridPosition in range)
+        {
+            gridVisualPositions[gridPosition].Show(GetMaterial(GridVisualType.RedSoft));
+            Debug.Log(gridPosition.ToString());
+        }
+        Debug.Log(range.Count);
+    }
     public void UpdateVisual(List<GridPosition> gridPositions)
     {
         this.gridPositions = gridPositions;
-        HideAllGridVisual();
+        if (range.Count > 0)
+        {
+            ShowListRangeGridVisual();
+        }
         if (gridPositions.Count > 0)
         {
             ShowListGridVisual();
         }
+        
     }
     private Material GetMaterial(GridVisualType gridVisualType)
     {
@@ -130,6 +151,12 @@ public class GridSystemVisual : MonoBehaviour
                 break;
             case SpinAction:
                 gridVisualType = GridVisualType.Blue;
+                break;
+            case GrenadeAction:
+                gridVisualType = GridVisualType.Yellow;
+                break;
+            case SwordAction:
+                gridVisualType = GridVisualType.Red;
                 break;
         }
         gridMaterial = GetMaterial(gridVisualType);

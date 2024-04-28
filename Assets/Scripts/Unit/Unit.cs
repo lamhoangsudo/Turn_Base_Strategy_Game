@@ -9,6 +9,7 @@ public class Unit : MonoBehaviour
     private GridPosition gridPosition;
     [SerializeField] private int actionPoin;
     [SerializeField] private bool isPlayer;
+    [SerializeField] private int grenadeAmount;
     public BaseAction selectAction;
     private const int MAX_ACTION_POINT = 2;
     private HeathSystem heathSystem;
@@ -16,8 +17,7 @@ public class Unit : MonoBehaviour
     public static event EventHandler<int> OnAnyActionPointChange;
     public event EventHandler OnUnitActionPointChange;
     public static event EventHandler OnUnitSwapned;
-    public static event EventHandler OnUnitDead;
-    
+    public static event EventHandler OnUnitDead;    
     private void Start()
     {
         actionPoin = MAX_ACTION_POINT;
@@ -91,5 +91,9 @@ public class Unit : MonoBehaviour
     public float GetHealthAmount()
     {
         return heathSystem.GetHealthNormalize();
+    }
+    public int GetGrenadeAmount()
+    {
+        return grenadeAmount;
     }
 }

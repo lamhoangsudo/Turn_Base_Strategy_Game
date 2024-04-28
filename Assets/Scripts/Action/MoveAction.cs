@@ -16,9 +16,6 @@ public class MoveAction : BaseAction
     public event EventHandler OnStartAction;
     public event EventHandler OnStopAction;
     private int currentIndex;
-    private void Start()
-    {
-    }
     private void Update()
     {
         HandleMovement();
@@ -54,9 +51,9 @@ public class MoveAction : BaseAction
     }
     public override bool IsValidGridPosition(GridPosition gridPosition)
     {
-        return GetListValidGridPosition().Contains(gridPosition);
+        return GetListValidGridPosition(out _).Contains(gridPosition);
     }
-    public override List<GridPosition> GetListValidGridPosition()
+    public override List<GridPosition> GetListValidGridPosition(out List<GridPosition> range)
     {
         List<GridPosition> gridPositionsValid = new();
         GridPosition unitGridPosition = unit.GetGridPosition();
@@ -76,6 +73,7 @@ public class MoveAction : BaseAction
                 };
             }
         }
+        range = new();
         return gridPositionsValid;
     }
     public bool UnitIsMoving()
