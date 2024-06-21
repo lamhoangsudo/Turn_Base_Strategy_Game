@@ -826,6 +826,7 @@ GameObject:
   - component: {fileID: 3544967256471741111}
   - component: {fileID: 3044413367648730227}
   - component: {fileID: 3744929225506904069}
+  - component: {fileID: 586526583542183326}
   m_Layer: 7
   m_Name: Unit
   m_TagString: Untagged
@@ -865,7 +866,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actionPoin: 0
-  isPlayer: 0
+  isPlayer: 1
   grenadeAmount: 0
   selectAction: {fileID: 0}
 --- !u!65 &5557019275092520731
@@ -883,7 +884,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -903,7 +904,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   rotationSpeed: 7
-  maxMoveDistance: 5
+  maxMoveDistance: 10
 --- !u!114 &7474889798720305319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1014,6 +1015,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   rotationSpeed: 7
+--- !u!114 &586526583542183326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559023256260476457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4686a7e5954e4d43a8ba480c673b5de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wall:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1001 &6411649965754705190
 PrefabInstance:
   m_ObjectHideFlags: 0

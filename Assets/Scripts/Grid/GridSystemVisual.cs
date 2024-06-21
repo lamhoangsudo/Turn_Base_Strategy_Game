@@ -124,7 +124,7 @@ public class GridSystemVisual : MonoBehaviour
         {
             ShowListGridVisual();
         }
-        
+
     }
     private Material GetMaterial(GridVisualType gridVisualType)
     {
@@ -157,6 +157,9 @@ public class GridSystemVisual : MonoBehaviour
                 break;
             case SwordAction:
                 gridVisualType = GridVisualType.Red;
+                break;
+            case InteractAction:
+                gridVisualType = GridVisualType.Blue;
                 break;
         }
         gridMaterial = GetMaterial(gridVisualType);

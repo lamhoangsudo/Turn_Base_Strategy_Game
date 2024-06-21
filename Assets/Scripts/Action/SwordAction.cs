@@ -78,7 +78,6 @@ public class SwordAction : BaseAction
             for (int z = -MAX_DISTANCE; z <= MAX_DISTANCE; z++)
             {
                 GridPosition validGridPosition = unitGridPosition + new GridPosition(x, z);
-                Debug.Log(validGridPosition);
                 if (!LevelGrid.Instance.IsValidGridPosition(validGridPosition)) continue;               
                 if (validGridPosition == unitGridPosition) continue;
                 if (Physics.Raycast(LevelGrid.Instance.GetGridPosition(unit.GetGridPosition()) + Vector3.up * 1.7f,

@@ -12,6 +12,6 @@ public class PathfindingUpdate : MonoBehaviour
 
     private void UpdatePathfinding(object sender, GridPosition gp)
     {
-        Pathfinding.instance.SetWalkable(gp);
+        Pathfinding.instance.SetWalkable(gp, true);
     }
 }

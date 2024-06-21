@@ -17,9 +17,6 @@ public class LevelGrid : MonoBehaviour
         Instance = this;
         gridSystem = new(width, height, cellSize, (GridPosition p, GridSystem<GridObject> s) => new GridObject(p, s));
         //gridSystem.CreateGridDebugObject(gridDebugPrefab);
-    }
-    private void Start()
-    {
         Pathfinding.instance.SetUp(width, height, cellSize);
     }
     public void AddUnitAtGridPosition(GridPosition gridPosition, Unit unit)
@@ -62,5 +59,14 @@ public class LevelGrid : MonoBehaviour
     {
         width = gridSystem.width;
         height = gridSystem.height;
+    }
+    public void AddDoorAtGridPosition(GridPosition gridPosition, Door door)
+    {
+        GridObject gridObject = gridSystem.GetGridObject(gridPosition);
+        gridObject.SetDoorAtGridObject(door);
+    }
+    public Door GetDoorAtGridPosition(GridPosition gridPosition)
+    {
+        return gridSystem.GetGridObject(gridPosition).GetDoorAtGridObject();
     }
 }
