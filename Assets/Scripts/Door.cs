@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Door : MonoBehaviour
+public class Door : MonoBehaviour, IInteract
 {
     [SerializeField] private Transform doorleft;
     [SerializeField] private Transform doorright;
@@ -16,7 +16,7 @@ public class Door : MonoBehaviour
     private void Start()
     {
         gridPosition = LevelGrid.Instance.GetGridPosition(transform.position);
-        LevelGrid.Instance.AddDoorAtGridPosition(gridPosition, this);
+        LevelGrid.Instance.AddInteractObjectAtGridPosition(gridPosition, this);
         if(isOpen)
         {
             OpenDoor();

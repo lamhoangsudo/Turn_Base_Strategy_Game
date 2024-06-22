@@ -60,13 +60,13 @@ public class LevelGrid : MonoBehaviour
         width = gridSystem.width;
         height = gridSystem.height;
     }
-    public void AddDoorAtGridPosition(GridPosition gridPosition, Door door)
+    public void AddInteractObjectAtGridPosition(GridPosition gridPosition, IInteract interactObject)
     {
         GridObject gridObject = gridSystem.GetGridObject(gridPosition);
-        gridObject.SetDoorAtGridObject(door);
+        gridObject.SetInteractObjectAtGridObject(interactObject);
     }
-    public Door GetDoorAtGridPosition(GridPosition gridPosition)
+    public IInteract GetInteractObjectAtGridPosition(GridPosition gridPosition)
     {
-        return gridSystem.GetGridObject(gridPosition).GetDoorAtGridObject();
+        return gridSystem.GetGridObject(gridPosition).GetInteractObjectAtGridObject();
     }
 }

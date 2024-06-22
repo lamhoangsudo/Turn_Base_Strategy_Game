@@ -8,7 +8,7 @@ public class InteractAction : BaseAction
 {
     private const int MAX_DISTANCE = 1;
     [SerializeField] private LayerMask wall;
-    private Door targetDoor;
+    private IInteract targetInteract;
     private void Update()
     {
         if (!isActive) return;
@@ -18,13 +18,13 @@ public class InteractAction : BaseAction
         unit = unitAction;
         if (unit.IsPlayer())
         {
-            targetDoor = LevelGrid.Instance.GetDoorAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
-            targetDoor.Interact(ActionComplete);
+            targetInteract = LevelGrid.Instance.GetInteractObjectAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
+            targetInteract.Interact(ActionComplete);
         }
         else
         {
             Vector3 tagetPosition = LevelGrid.Instance.GetGridPosition(aIAction.gridPosition);
-            targetDoor = LevelGrid.Instance.GetDoorAtGridPosition(LevelGrid.Instance.GetGridPosition(tagetPosition));
+            targetInteract = LevelGrid.Instance.GetInteractObjectAtGridPosition(LevelGrid.Instance.GetGridPosition(tagetPosition));
         }
         ActionStart(OnActionComplete);
     }
@@ -69,7 +69,7 @@ public class InteractAction : BaseAction
                         wall)) continue;
                 range.Add(validGridPosition);
                 if (LevelGrid.Instance.IsUnitOnGridPosition(validGridPosition)) continue;
-                if (LevelGrid.Instance.GetDoorAtGridPosition(validGridPosition) == null) continue;
+                if (LevelGrid.Instance.GetInteractObjectAtGridPosition(validGridPosition) == null) continue;
                 {
                     gridPositionsValid.Add(validGridPosition);
                 }
