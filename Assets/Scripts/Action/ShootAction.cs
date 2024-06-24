@@ -125,7 +125,7 @@ public class ShootAction : BaseAction
         unit = unitAction;
         if (unit.IsPlayer())
         {
-            targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()))[0];
+            targetUnit = LevelGrid.Instance.GetUnitAtGridPosition(LevelGrid.Instance.GetGridPosition(InputManager.Instance.GetMouseWorldPosition(out _)))[0];
         }
         else
         {

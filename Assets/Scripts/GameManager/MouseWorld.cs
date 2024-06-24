@@ -5,17 +5,16 @@ using UnityEngine;
 public class MouseWorld : MonoBehaviour
 {
     public static MouseWorld Instance;
-    [SerializeField] private LayerMask mouseLayer;
     private void Awake()
     {
         Instance = this;
     }
     private void Update()
     {
-        this.transform.position = UtilClass.GetMouseWorldPosititon(Camera.main, mouseLayer);
+        this.transform.position = InputManager.Instance.GetMouseWorldPosition(out _);
     }
-    public Vector3 GetTagetPosititon()
+    /*public Vector3 GetTagetPosititon()
     {
-        return UtilClass.GetMouseWorldPosititon(Camera.main, mouseLayer);
-    }
+        return InputManager.Instance.GetMouseWorldPosition(mouseLayer);
+    }*/
 }

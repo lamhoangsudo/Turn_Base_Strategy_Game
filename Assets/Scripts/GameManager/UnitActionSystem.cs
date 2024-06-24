@@ -11,7 +11,6 @@ public class UnitActionSystem : MonoBehaviour
     public static UnitActionSystem Instance;
     private Unit selectUnit;
     private BaseAction selectAction;
-    [SerializeField] private LayerMask mouseLayer;
     public event EventHandler<Unit> OnSelectUnitChange;
     public event EventHandler<BaseAction> OnSelectActionChange;
     public event EventHandler<bool> OnBusyChange;
@@ -30,11 +29,11 @@ public class UnitActionSystem : MonoBehaviour
     }
     private void HandleActionSelection()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (InputManager.Instance.IsMouseButtonDown())
         {
-            if (selectUnit != null 
-                && selectAction != null 
-                && selectAction.IsValidGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon())))
+            if (selectUnit != null
+                && selectAction != null
+                && selectAction.IsValidGridPosition(LevelGrid.Instance.GetGridPosition(InputManager.Instance.GetMouseWorldPosition(out _))))
             {
                 if (selectUnit.TryToSpendActionPoint(selectAction, false))
                 {
@@ -55,10 +54,10 @@ public class UnitActionSystem : MonoBehaviour
     }
     private bool HandleUnitSelection()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (InputManager.Instance.IsMouseButtonDown())
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hitInfo, float.MaxValue, mouseLayer.value))
+            InputManager.Instance.GetMouseWorldPosition(out RaycastHit hitInfo);
+            try
             {
                 if (hitInfo.transform.TryGetComponent<Unit>(out Unit unit) && unit.IsPlayer() == true && TurnSystem.Instance.isPlayerTurn == true)
                 {
@@ -69,6 +68,10 @@ public class UnitActionSystem : MonoBehaviour
                     OnSelectActionChange?.Invoke(this, selectAction);
                     return true;
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.Log(ex.Message);
             }
         }
         return false;

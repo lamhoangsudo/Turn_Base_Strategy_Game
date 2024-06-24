@@ -18,7 +18,7 @@ public class InteractAction : BaseAction
         unit = unitAction;
         if (unit.IsPlayer())
         {
-            targetInteract = LevelGrid.Instance.GetInteractObjectAtGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
+            targetInteract = LevelGrid.Instance.GetInteractObjectAtGridPosition(LevelGrid.Instance.GetGridPosition(InputManager.Instance.GetMouseWorldPosition(out _)));
             targetInteract.Interact(ActionComplete);
         }
         else

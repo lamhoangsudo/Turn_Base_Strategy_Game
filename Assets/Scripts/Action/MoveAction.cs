@@ -93,7 +93,7 @@ public class MoveAction : BaseAction
         currentIndex = 0;
         if (unit.IsPlayer())
         {
-            listPosition = Pathfinding.instance.FindPath(unitAction.GetGridPosition(), LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()), out _);
+            listPosition = Pathfinding.instance.FindPath(unitAction.GetGridPosition(), LevelGrid.Instance.GetGridPosition(InputManager.Instance.GetMouseWorldPosition(out _)), out _);
         }
         else
         {

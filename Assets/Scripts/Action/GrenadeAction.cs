@@ -67,7 +67,7 @@ public class GrenadeAction : BaseAction
         Vector3 tagetPosition;
         if (unit.IsPlayer())
         {
-            tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(MouseWorld.Instance.GetTagetPosititon()));
+            tagetPosition = LevelGrid.Instance.GetGridPosition(LevelGrid.Instance.GetGridPosition(InputManager.Instance.GetMouseWorldPosition(out _)));
         }
         else
         {

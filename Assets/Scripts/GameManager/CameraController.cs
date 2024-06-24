@@ -21,47 +21,17 @@ public class CameraController : MonoBehaviour
     }
     private void HandleMovement()
     {
-        Vector3 inputVectorDir = Vector3.zero;
-        if(Input.GetKey(KeyCode.W))
-        {
-            inputVectorDir.z++;
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            inputVectorDir.z--;
-        }
-        if(Input.GetKey(KeyCode.D))
-        {
-            inputVectorDir.x++;
-        }
-        else if(Input.GetKey(KeyCode.A)) {
-            inputVectorDir.x--;
-        }
+        Vector3 inputVectorDir = InputManager.Instance.GetCameraMoveVector();
         transform.position += 10f * Time.deltaTime * (transform.forward * inputVectorDir.z + transform.right * inputVectorDir.x);
     }
     private void HandleRotation()
     {
-        Vector3 inputVectorRotation = Vector3.zero;
-        if (Input.GetKey(KeyCode.Q))
-        {
-            inputVectorRotation.y++;
-        }
-        else if (Input.GetKey(KeyCode.E))
-        {
-            inputVectorRotation.y--;
-        }
+        Vector3 inputVectorRotation = InputManager.Instance.GetCameraRotationVector();
         transform.eulerAngles += 100f * Time.deltaTime * inputVectorRotation;
     }
     private void HandleZoom()
     {
-        if (Input.mouseScrollDelta.y > 0)
-        {
-            followOffSet.y++;
-        }
-        else if (Input.mouseScrollDelta.y < 0)
-        {
-            followOffSet.y--;
-        }
+        followOffSet = InputManager.Instance.GetCameraZoomVector(followOffSet);
         followOffSet.y = Mathf.Clamp(followOffSet.y, 1f, 20f);
         transposer.m_FollowOffset = Vector3.Slerp(transposer.m_FollowOffset, followOffSet, Time.deltaTime * 2f);
     }
