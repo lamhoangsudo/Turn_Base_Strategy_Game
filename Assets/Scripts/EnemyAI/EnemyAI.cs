@@ -49,7 +49,6 @@ public class EnemyAI : MonoBehaviour
                     else
                     {
                         TurnSystem.Instance.IncreaseTurnNumber();
-                        
                     }
                 }
                 break;
@@ -79,14 +78,13 @@ public class EnemyAI : MonoBehaviour
         BaseAction bestAction = null;
         foreach(BaseAction baseAction in enemy.baseActions)
         {
-            if (enemy.TryToSpendActionPoint(baseAction, false)) 
+            if (enemy.TryToSpendActionPoint(baseAction, true)) 
             {
                 EnemyAIAction checkEnemyAIAction = baseAction.GetBestEnemyAIAction();
                 if (bestEnemyAIAction == null)
                 {
                     bestEnemyAIAction = checkEnemyAIAction;
                     bestAction = baseAction;
-                    
                 }
                 else
                 {
@@ -96,7 +94,6 @@ public class EnemyAI : MonoBehaviour
                         bestAction = baseAction;
                     }
                 }
-                enemy.TryToSpendActionPoint(baseAction, true);
             }
         }
         enemy.selectAction = bestAction;

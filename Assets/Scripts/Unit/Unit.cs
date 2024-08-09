@@ -67,20 +67,37 @@ public class Unit : MonoBehaviour
         }
     }
     public GridPosition GetGridPosition() { return gridPosition; }
-    public bool TryToSpendActionPoint(BaseAction selectAction, bool returnActionPoint)
+    public bool TryToSpendActionPoint(BaseAction selectAction, bool returnActionPointOrCheckBestAIAction)
     {
-        if (actionPoin >= selectAction.GetActionPointCost() && returnActionPoint == false)
+        if (isPlayer)
         {
-            actionPoin -= selectAction.GetActionPointCost();
-            OnUnitActionPointChange?.Invoke(this, EventArgs.Empty);
-            return true;
+            if (actionPoin >= selectAction.GetActionPointCost() && returnActionPointOrCheckBestAIAction == false)
+            {
+                actionPoin -= selectAction.GetActionPointCost();
+                OnUnitActionPointChange?.Invoke(this, EventArgs.Empty);
+                return true;
+            }
+            else if (returnActionPointOrCheckBestAIAction == true)
+            {
+                actionPoin += selectAction.GetActionPointCost();
+                return true;
+            }
         }
-        else if (returnActionPoint == true)
+        else
         {
-            actionPoin += selectAction.GetActionPointCost();
-            return true;
+            int actionPoinCalculated = actionPoin - selectAction.GetActionPointCost();
+            if (actionPoinCalculated >= 0 && returnActionPointOrCheckBestAIAction == true)
+            {
+                return true;
+            }
+            else if(returnActionPointOrCheckBestAIAction == false)
+            {
+                actionPoin = actionPoinCalculated;
+                OnUnitActionPointChange?.Invoke(this, EventArgs.Empty);
+                return true;
+            }
         }
-        else { return false; }
+        return false;
     }
     public int GetActionPoint() { return actionPoin; }
     public bool IsPlayer() { return isPlayer; }

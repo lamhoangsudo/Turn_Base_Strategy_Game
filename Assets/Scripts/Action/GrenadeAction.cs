@@ -81,11 +81,19 @@ public class GrenadeAction : BaseAction
     }
     public override EnemyAIAction GetEnemyAIAction(GridPosition gridPosition)
     {
+        /*
+        Debug.Log(LevelGrid.Instance.GetGridPosition(gridPosition));
         Unit tagetUnit = LevelGrid.Instance.GetUnitAtGridPosition(gridPosition)[0];
         return new EnemyAIAction()
         {
             gridPosition = gridPosition,
             actionValue = 100 + Mathf.RoundToInt((1 - tagetUnit.GetHealthAmount()) * 100f)
+        };
+        */
+        return new EnemyAIAction()
+        {
+            gridPosition = gridPosition,
+            actionValue = 0
         };
     }
 
